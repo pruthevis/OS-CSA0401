@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <dirent.h>
+int main() {
+    DIR *d;
+    struct dirent *dir;
+    d = opendir(".");
+    if (d) {
+        printf("Files in directory:\n");
+        while ((dir = readdir(d)) != NULL) {
+            if (dir->d_type == DT_REG)
+                printf("%s\n", dir->d_name);
+        }
+        closedir(d);
+    }
+    return 0;
+}
