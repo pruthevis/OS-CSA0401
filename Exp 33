@@ -1,0 +1,61 @@
+#include <stdio.h>
+
+int search(int key, int frame[], int f) {
+    for(int i = 0; i < f; i++)
+        if(frame[i] == key) return 1;
+    return 0;
+}
+
+int predict(int page[], int frame[], int n, int index, int f) {
+    int res = -1, farthest = index;
+    for(int i = 0; i < f; i++) {
+        int j;
+        for(j = index; j < n; j++) {
+            if(frame[i] == page[j]) {
+                if(j > farthest) {
+                    farthest = j;
+                    res = i;
+                }
+                break;
+            }
+        }
+        if(j == n) return i;
+    }
+    return (res == -1) ? 0 : res;
+}
+
+int main() {
+    int n, f, i, j, fault = 0;
+    printf("Enter number of pages: ");
+    scanf("%d", &n);
+    int page[n];
+    printf("Enter reference string: ");
+    for(i = 0; i < n; i++) scanf("%d", &page[i]);
+
+    printf("Enter number of frames: ");
+    scanf("%d", &f);
+    int frame[f];
+    int filled = 0;
+
+    for(i = 0; i < n; i++) {
+        if(search(page[i], frame, filled)) {
+            // Hit
+        } else {
+            if(filled < f)
+                frame[filled++] = page[i];
+            else {
+                int pos = predict(page, frame, n, i + 1, f);
+                frame[pos] = page[i];
+            }
+            fault++;
+        }
+
+        printf("Frame: ");
+        for(j = 0; j < filled; j++)
+            printf("%d ", frame[j]);
+        printf("\n");
+    }
+
+    printf("Total Page Faults = %d\n", fault);
+    return 0;
+}
