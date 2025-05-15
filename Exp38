@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+void SCAN(int arr[], int n, int head, int direction, int diskSize) {
+    int total = 0;
+    int left[100], right[100];
+    int l = 0, r = 0;
+    if (direction == 1) right[r++] = diskSize - 1;
+    else left[l++] = 0;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] < head) left[l++] = arr[i];
+        else right[r++] = arr[i];
+    }
+    qsort(left, l, sizeof(int), (int (*)(const void*, const void*)) (int (*)(int, int)) strcmp);
+    qsort(right, r, sizeof(int), (int (*)(const void*, const void*)) (int (*)(int, int)) strcmp);
+    int run[200], idx = 0;
+    printf("Order: %d ", head);
+    if (direction == 1) {
+        for (int i = 0; i < r; i++) {
+            total += abs(head - right[i]);
+            head = right[i];
+            printf("-> %d ", head);
+        }
+        for (int i = l - 1; i >= 0; i--) {
+            total += abs(head - left[i]);
+            head = left[i];
+            printf("-> %d ", head);
+        }
+    } else {
+        for (int i = l - 1; i >= 0; i--) {
+            total += abs(head - left[i]);
+            head = left[i];
+            printf("-> %d ", head);
+        }
+        for (int i = 0; i < r; i++) {
+            total += abs(head - right[i]);
+            head = right[i];
+            printf("-> %d ", head);
+        }
+    }
+    printf("\nTotal seek time: %d\n", total);
+}
+int main() {
+    int arr[] = {98, 183, 37, 122, 14, 124, 65, 67};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int head = 53;
+    int direction = 1; // 1 for right, 0 for left
+    int diskSize = 200;
+
+    SCAN(arr, n, head, direction, diskSize);
+    return 0;
+}
