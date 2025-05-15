@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+typedef struct Block {
+    int blockNumber;
+    struct Block *next;
+} Block;
+Block* createBlock(int num) {
+    Block *newBlock = (Block*)malloc(sizeof(Block));
+    newBlock->blockNumber = num;
+    newBlock->next = NULL;
+    return newBlock;
+}
+void displayFile(Block *head) {
+    Block *temp = head;
+    printf("File blocks: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->blockNumber);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+int main() {
+    int blocks[] = {5, 9, 13, 18}; // Example disk blocks
+    int n = sizeof(blocks)/sizeof(blocks[0]);
+
+    Block *head = NULL, *tail = NULL;
+
+    for (int i = 0; i < n; i++) {
+        Block *newBlock = createBlock(blocks[i]);
+        if (head == NULL) {
+            head = tail = newBlock;
+        } else {
+            tail->next = newBlock;
+            tail = newBlock;
+        }
+    }
+    printf("Linked allocation of file:\n");
+    displayFile(head);
+    printf("Start block: %d\n", head->blockNumber);
+    printf("End block: %d\n", tail->blockNumber);
+    return 0;
+}
