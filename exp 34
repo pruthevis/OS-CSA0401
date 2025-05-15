@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int main() {
+    int files, start = 0;
+    printf("Enter number of files: ");
+    scanf("%d", &files);
+
+    int size[files], startBlock[files], endBlock[files];
+
+    for (int i = 0; i < files; i++) {
+        printf("Enter size (in blocks) of file %d: ", i + 1);
+        scanf("%d", &size[i]);
+        startBlock[i] = start;
+        endBlock[i] = start + size[i] - 1;
+        start += size[i];
+    }
+
+    printf("\nFile\tStart\tEnd\tBlocks Used\n");
+    for (int i = 0; i < files; i++) {
+        printf("%d\t%d\t%d\t", i + 1, startBlock[i], endBlock[i]);
+        for (int j = startBlock[i]; j <= endBlock[i]; j++)
+            printf("%d ", j);
+        printf("\n");
+    }
+
+    return 0;
+}
